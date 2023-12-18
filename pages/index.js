@@ -107,7 +107,7 @@ export default function Home() {
           <input className='form-control' type="text" name="customer_name" value={customerName} onChange={handleChangeName} />
         </div>
         <div className='col-md-12 my-3 px-2 border border-dark'>
-          {itemForm.length > 0 ? itemForm.map(item => <ItemForm product={listProduct} data={item} setQty={handleChangeQty} setItemValue={handleChangeProduct}/>) : <></>}
+          {itemForm.length > 0 ? itemForm.map(item => <ItemForm key={'ItemForm'+item.id} product={listProduct} data={item} setQty={handleChangeQty} setItemValue={handleChangeProduct}/>) : <></>}
           <div className='text-end pt-3 pb-2'>
             <button className='btn btn-primary' type='button' onClick={()=> addItems()}>Add Items</button>
           </div>

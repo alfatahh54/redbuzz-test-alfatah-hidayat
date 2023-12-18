@@ -7,7 +7,7 @@ export default function ItemForm(prop){
                     {
                         prop.product?.length > 0 ?
                         prop.product.map(dt => {
-                            return <option value={dt.id+'-'+prop.data.id} data={dt}>{dt.name}</option>
+                            return <option key={dt.id+'-'+prop.data.id} value={dt.id+'-'+prop.data.id} data={dt}>{dt.name}</option>
                         }) : <></>
                     }
                 </select>
