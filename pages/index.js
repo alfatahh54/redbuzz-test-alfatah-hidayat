@@ -1,131 +1,122 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
-
+import { useEffect, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.css'
+import ItemForm from './itemForm';
 export default function Home() {
+  const [addItem, setAddItem] = useState(true)
+  const [itemForm, setItemForm] = useState([])
+  const [listProduct, setListProduct] = useState([])
+  const [customerName, setCustomerName] = useState('')  
+  
+  const addItems = ()=>{
+    setAddItem(true)
+  } 
+
+  const cancel = () => {
+    setCustomerName('')
+    setItemForm([])
+    setAddItem(true)
+  }  
+  
+  useEffect(() => {
+    const fetchData = async() => {
+      const resp = await fetch('/api/product')
+      const response = await resp.json()
+      setListProduct(response.data)
+    }
+    fetchData()
+  },[])
+  
+  const handleChangeProduct = (event) => {
+    event.preventDefault()
+    let value = event.target.value.split('-')
+    let newItemForm = itemForm.map(dt => {
+      if (dt.id == value[1]){
+        let selectedData = listProduct.filter(product => {
+          return product.id == value[0]
+        })[0]
+        dt.product_id = selectedData.id
+        dt.price = selectedData.price
+        dt.total = dt.price * dt.qty
+      }
+      return dt
+    }) 
+    setItemForm(newItemForm)
+  }
+
+  const handleChangeQty = (event) => {
+    event.preventDefault()
+    let value = parseInt(event.target.value)
+
+    let newItemForm = itemForm.map(dt => {
+      if (dt.id == event.target.getAttribute('data-key')){
+        dt.qty = value
+        dt.total = dt.price * dt.qty
+      }
+      return dt
+    }) 
+    setItemForm(newItemForm)
+  }
+
+  const handleChangeName = (event) => {
+    event.preventDefault()
+    setCustomerName(event.target.value)    
+  }
+
+  const onSubmit = () => {
+
+    const dataProduct = itemForm.map((dt) => {
+      return {
+        product_id: dt.product_id,
+        qty: dt.qty
+      }
+    })
+    const data = {
+      customer_name: customerName,
+      product_list: dataProduct
+    }
+    fetch('/api/transaction', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then(async(response) => {
+          const dataRes = await response.json()
+          if (dataRes.data)
+            alert('Your transaction code is '+ dataRes.data)
+          else if (dataRes.message)
+            alert(dataRes.message)
+        })
+        .then((data) => console.log(data))
+  }
+
+  useEffect(()=>{
+    if (addItem && listProduct.length>0) {
+      const selectedData = listProduct[0]
+      setItemForm([...itemForm, {id: itemForm.length + 1, product_id: selectedData.id, price: selectedData.price, qty: 1, total: selectedData.price}])
+      setAddItem(false)
+    }
+  },[addItem, listProduct])
+  
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+    <div className='col-md-10 py-4 px-5'>
+      <form>
+        <div className='my-3 py-2 px-2 border border-dark'>
+          <label>Nama Customer</label>
+          <input className='form-control' type="text" name="customer_name" value={customerName} onChange={handleChangeName} />
         </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family:
-            Menlo,
-            Monaco,
-            Lucida Console,
-            Liberation Mono,
-            DejaVu Sans Mono,
-            Bitstream Vera Sans Mono,
-            Courier New,
-            monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            Segoe UI,
-            Roboto,
-            Oxygen,
-            Ubuntu,
-            Cantarell,
-            Fira Sans,
-            Droid Sans,
-            Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
+        <div className='col-md-12 my-3 px-2 border border-dark'>
+          {itemForm.length > 0 ? itemForm.map(item => <ItemForm product={listProduct} data={item} setQty={handleChangeQty} setItemValue={handleChangeProduct}/>) : <></>}
+          <div className='text-end pt-3 pb-2'>
+            <button className='btn btn-primary' type='button' onClick={()=> addItems()}>Add Items</button>
+          </div>
+        </div>
+        <div className='col-md-12 text-end pt-2'>
+          <button className='btn btn-warning me-2' type='button' onClick={()=> cancel()}>Cancel</button>
+          <button className='btn btn-success' type='button' onClick={()=> onSubmit()}>Submit</button>
+        </div>
+      </form>
     </div>
   );
 }
