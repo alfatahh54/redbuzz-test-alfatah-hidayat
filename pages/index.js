@@ -19,7 +19,7 @@ export default function Home() {
   
   useEffect(() => {
     const fetchData = async() => {
-      const resp = await fetch('/api/product')
+      const resp = await fetch('http://localhost:8080/api/product')
       const response = await resp.json()
       setListProduct(response.data)
     }
@@ -74,7 +74,7 @@ export default function Home() {
       customer_name: customerName,
       product_list: dataProduct
     }
-    fetch('/api/transaction', {
+    fetch('http://localhost:8080/api/transaction', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
