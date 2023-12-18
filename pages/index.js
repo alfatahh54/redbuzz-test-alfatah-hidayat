@@ -46,7 +46,6 @@ export default function Home() {
   const handleChangeQty = (event) => {
     event.preventDefault()
     let value = parseInt(event.target.value)
-
     let newItemForm = itemForm.map(dt => {
       if (dt.id == event.target.getAttribute('data-key')){
         dt.qty = value
@@ -74,7 +73,7 @@ export default function Home() {
       customer_name: customerName,
       product_list: dataProduct
     }
-    fetch('http://localhost:8080/api/transaction', {
+    fetch('/api/transaction', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -18,7 +18,7 @@ export default function ItemForm(prop){
             </div>
             <div className="col-md-3">
                 <label >Qty</label>
-                <input className='form-control' value={prop.data?.qty || 0} data-key={prop.data?.iid} type="number" onChange={prop.setQty}/>
+                <input className='form-control' value={prop.data?.qty || 0} data-key={prop.data?.id} type="number" onChange={prop.setQty}/>
             </div>
             <div className="col-md-3">
                 <label>Total</label>

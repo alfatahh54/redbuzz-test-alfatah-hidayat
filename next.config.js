@@ -5,15 +5,12 @@ const nextConfig = {
     console.log("sdsf");
     return [
       {
-        source: "/api",
-        destination: "http://localhost:8080/api",
+        source: "/api/:path*",
+        destination: "http://localhost:8080/api/:path*",
         permanent: true,
       },
     ];
   },
-  // future: {
-  //   webpack5: true,
-  // },
   trailingSlash: true,
 };
 
