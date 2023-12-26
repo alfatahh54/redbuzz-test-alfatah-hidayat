@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/alfatahh54/create-transaction/model"
-	"github.com/alfatahh54/create-transaction/services"
+	"github.com/alfatahh54/create-transaction/api/model"
+	"github.com/alfatahh54/create-transaction/api/services"
 	"github.com/gin-gonic/gin"
 )
 

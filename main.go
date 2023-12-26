@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/alfatahh54/create-transaction/db"
-	"github.com/alfatahh54/create-transaction/routes"
+	"github.com/alfatahh54/create-transaction/api/db"
+	"github.com/alfatahh54/create-transaction/api/routes"
 	"github.com/gin-gonic/gin"
 )
 

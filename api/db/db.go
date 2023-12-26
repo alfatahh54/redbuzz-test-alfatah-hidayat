@@ -1,8 +1,8 @@
 package db
 
 import (
-	"github.com/alfatahh54/create-transaction/config"
-	"github.com/alfatahh54/create-transaction/model"
+	"github.com/alfatahh54/create-transaction/api/config"
+	"github.com/alfatahh54/create-transaction/api/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/alfatahh54/create-transaction/model"
-	"github.com/alfatahh54/create-transaction/services"
+	"github.com/alfatahh54/create-transaction/api/model"
+	"github.com/alfatahh54/create-transaction/api/services"
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,14 +39,14 @@ func CreateTransaction(c *gin.Context) {
 	}
 	var transactions []model.Transaction
 	transactionCode := time.Now().Unix()
-	for _, p := range products {
+	for _, i := range body.ProductList {
 		var transaction model.Transaction
-		transaction.ProductID = p.ID
-		transaction.Price = p.Price
-		for _, i := range body.ProductList {
+		for _, p := range products {
 			if i.ProductID == p.ID {
 				transaction.Qty = i.Qty
 				transaction.Total = i.Qty * p.Price
+				transaction.ProductID = p.ID
+				transaction.Price = p.Price
 			}
 		}
 		transaction.CustomerName = body.CustomerName

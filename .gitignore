@@ -32,3 +32,6 @@ yarn-error.log*
 /api/.env
 /api/gin-bin
 /api/create-transaction
+.env
+gin-bin
+create-transaction

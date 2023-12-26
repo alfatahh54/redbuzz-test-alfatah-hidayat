@@ -1,6 +1,6 @@
 package services
 
-import "github.com/alfatahh54/create-transaction/db"
+import "github.com/alfatahh54/create-transaction/api/db"
 
 func Create(data any) (err error) {
 	result := db.Database.DB.Create(data)
